@@ -4,6 +4,7 @@ import "fmt"
 import "github.com/nlopes/slack"
 import "os"
 import "time"
+import "strings"
 
 func handleRtm(rtm *slack.RTM) {
 
@@ -12,17 +13,16 @@ func handleRtm(rtm *slack.RTM) {
 		case msg := <-rtm.IncomingEvents:
 			switch ev := msg.Data.(type) {
 			case *slack.MessageEvent:
-				/*
-					&{{message D3LAES7C5 U035LF6C1 wefwef 1483234485.000004 false [] [] <nil>  false     <nil>      [] <nil> false <nil>  0 T035N23CL []} <nil>} {message D3LAES7C5 U035LF6C1 wefwef 1483234485.000004 false [] [] <nil>  false     <nil>      [] <nil> false <nil>  0 T035N23CL []}
+				//fmt.Println(ev.Msg.Type, ev.Msg.Channel, ev.Msg.User, ev.Msg.Username, ev.Msg.BotID)
 
-				*/
-				//fmt.Println(ev, ev.Msg)
-				name := ev.Msg.Text
-				m := rtm.NewOutgoingMessage("Okay making a new private channel for: "+name, ev.Msg.Channel)
-				rtm.SendMessage(m)
-				//api := slack.New(os.Getenv("BOT"))
-				//g, _ := api.CreateGroup("name")
-				//_, _, _ = api.InviteUserToGroup("name", "user")
+				if strings.HasPrefix(ev.Msg.Channel, "D") {
+					name := ev.Msg.Text
+					api := slack.New(os.Getenv("BOT"))
+					api.CreateGroup(name)
+					api.InviteUserToGroup(name, ev.Msg.User)
+					m := rtm.NewOutgoingMessage("Okay making a new private channel for: "+name, ev.Msg.Channel)
+					rtm.SendMessage(m)
+				}
 
 				//name := ev.Msg.Channel
 
@@ -37,8 +37,9 @@ func handleRtm(rtm *slack.RTM) {
 }
 
 func main() {
-	fmt.Println("vim-go")
+	fmt.Println("listening for proposals...")
 	api := slack.New(os.Getenv("BOT"))
+
 	rtm := api.NewRTM()
 
 	go rtm.ManageConnection()
