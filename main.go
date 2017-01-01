@@ -38,13 +38,18 @@ func handleRtm(rtm *slack.RTM) {
 							api := slack.New(os.Getenv("SLACK_PROPOSAL_ADMIN"))
 							name := "p" + fmt.Sprintf("%d", time.Now().Unix())
 							g, _ := api.CreateGroup(name)
-							api.InviteUserToGroup(name, ev.Msg.User)
-							api.InviteUserToGroup(name, Me)
+							fmt.Println(g.ID)
+							_, b1, e1 := api.InviteUserToGroup(g.ID, ev.Msg.User)
+							fmt.Println(b1, e1)
+							_, b2, e2 := api.InviteUserToGroup(g.ID, Me)
+							fmt.Println(b2, e2)
 
 							m := rtm.NewOutgoingMessage("All done. I have created a new private channel here: #"+name, ev.Msg.Channel)
 							rtm.SendMessage(m)
 
-							m = rtm.NewOutgoingMessage(fmt.Sprintf("%v", UserAnswers), g.ID)
+							m = rtm.NewOutgoingMessage("test", g.ID)
+							rtm.SendMessage(m)
+							m = rtm.NewOutgoingMessage(fmt.Sprintf("test %v", UserAnswers), g.ID)
 							rtm.SendMessage(m)
 						}
 					}
@@ -67,12 +72,15 @@ func handleRtm(rtm *slack.RTM) {
 }
 
 func main() {
-	Questions = []string{"First Name (Homeowner)", "Last Name (Homeowner)", "Address",
-		"Phone Number (as many as possible)", "Email Address", "Sales Rep (Opener)",
-		"Other Sales Rep (Optional)", "Utility Name", "Utility Customer Account Number",
-		"Close Date & Time", "Specify Product(s) for Proposal", "Which Loan Plan?", "How much expected Savings?",
-		"If we discover that the home is inefficient how do we pay for it?",
-		"Custom Package Option", "Specific Power Offset", "Specific PPA / Lease Rate", "Notes"}
+	Questions = []string{"First Name (Homeowner)", "Last Name (Homeowner)", "Address"}
+	/*
+		Questions = []string{"First Name (Homeowner)", "Last Name (Homeowner)", "Address",
+			"Phone Number (as many as possible)", "Email Address", "Sales Rep (Opener)",
+			"Other Sales Rep (Optional)", "Utility Name", "Utility Customer Account Number",
+			"Close Date & Time", "Specify Product(s) for Proposal", "Which Loan Plan?", "How much expected Savings?",
+			"If we discover that the home is inefficient how do we pay for it?",
+			"Custom Package Option", "Specific Power Offset", "Specific PPA / Lease Rate", "Notes"}
+	*/
 
 	fmt.Println("listening for proposals...")
 	api := slack.New(os.Getenv("SLACK_PROPOSAL_BOT"))
