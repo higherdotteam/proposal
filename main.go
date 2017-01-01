@@ -59,12 +59,6 @@ func handleRtm(rtm *slack.RTM) {
 					}
 				}
 
-				//name := ev.Msg.Channel
-
-				//h["text"] = ev.Msg.Text
-				//h["time"] = ev.Msg.Timestamp
-				//h["who"] = ev.Msg.User
-
 			}
 		}
 	}
