@@ -7,6 +7,7 @@ import "time"
 import "strings"
 
 var UserState map[string]int = make(map[string]int)
+var UserAnswers map[int]string = make(map[int]string)
 var Me string
 var Questions []string
 
