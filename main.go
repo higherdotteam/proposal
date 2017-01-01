@@ -44,7 +44,12 @@ func handleRtm(rtm *slack.RTM) {
 							m := rtm.NewOutgoingMessage("All done. I have created a new private channel here: #"+name, ev.Msg.Channel)
 							rtm.SendMessage(m)
 
-							m = rtm.NewOutgoingMessage(fmt.Sprintf("test %v", UserAnswers), g.ID)
+							buffer := ""
+							for i, q := range Questions {
+								buffer += fmt.Sprintf("%d. %s\n", i+1, q)
+								buffer += fmt.Sprintf("%s\n\n", UserAnswers[i+1])
+							}
+							m = rtm.NewOutgoingMessage(buffer, g.ID)
 							rtm.SendMessage(m)
 						}
 					}
