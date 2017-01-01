@@ -24,19 +24,15 @@ func handleRtm(rtm *slack.RTM) {
 					//api.InviteUserToGroup(name, ev.Msg.User)
 
 					from := ev.Msg.User
-					state, ok := UserState[from]
-					if !ok {
-						UserState[from] = 1
-					}
 
-					if state == 1 {
+					if UserState[from] == 0 {
 						m := rtm.NewOutgoingMessage("Hello, let's start your proposal. What is first name?", ev.Msg.Channel)
 						rtm.SendMessage(m)
-						UserState[from] = 2
-					} else if state == 2 {
+						UserState[from] = 1
+					} else if UserState[from] == 1 {
 						m := rtm.NewOutgoingMessage("What is last name?", ev.Msg.Channel)
 						rtm.SendMessage(m)
-						UserState[from] = 3
+						UserState[from] = 2
 					} else {
 						m := rtm.NewOutgoingMessage("All done", ev.Msg.Channel)
 						rtm.SendMessage(m)
