@@ -21,11 +21,6 @@ func handleRtm(rtm *slack.RTM) {
 				fmt.Println(ev.Msg.Type, ev.Msg.Channel, ev.Msg.User, ev.Msg.Text)
 
 				if ev.Msg.User != Me && strings.HasPrefix(ev.Msg.Channel, "D") {
-					//name := ev.Msg.Text
-					//api := slack.New(os.Getenv("SLACK_PROPOSAL_ADMIN"))
-					//api.CreateGroup(name)
-					//api.InviteUserToGroup(name, ev.Msg.User)
-
 					from := ev.Msg.User
 
 					switch UserState[from] {
@@ -34,11 +29,22 @@ func handleRtm(rtm *slack.RTM) {
 							len(Questions), Questions[0]), ev.Msg.Channel)
 						rtm.SendMessage(m)
 					default:
+						UserAnswers[UserState[from]] = ev.Msg.Text
 						if UserState[from] < len(Questions) {
 							m := rtm.NewOutgoingMessage(fmt.Sprintf("What is %s", Questions[UserState[from]]), ev.Msg.Channel)
 							rtm.SendMessage(m)
 						} else {
-							m := rtm.NewOutgoingMessage("All done. I have created a new private channel here: foo", ev.Msg.Channel)
+							fmt.Println(UserAnswers)
+							api := slack.New(os.Getenv("SLACK_PROPOSAL_ADMIN"))
+							name := "p" + fmt.Sprintf("%d", time.Now().Unix())
+							g, _ := api.CreateGroup(name)
+							api.InviteUserToGroup(name, ev.Msg.User)
+							api.InviteUserToGroup(name, Me)
+
+							m := rtm.NewOutgoingMessage("All done. I have created a new private channel here: #"+name, ev.Msg.Channel)
+							rtm.SendMessage(m)
+
+							m = rtm.NewOutgoingMessage(fmt.Sprintf("%v", UserAnswers), g.ID)
 							rtm.SendMessage(m)
 						}
 					}
