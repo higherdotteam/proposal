@@ -6,6 +6,8 @@ import "os"
 import "time"
 import "strings"
 
+var UserState map[string]int = make(map[string]int)
+
 func handleRtm(rtm *slack.RTM) {
 
 	for {
@@ -16,12 +18,30 @@ func handleRtm(rtm *slack.RTM) {
 				//fmt.Println(ev.Msg.Type, ev.Msg.Channel, ev.Msg.User, ev.Msg.Username, ev.Msg.BotID)
 
 				if strings.HasPrefix(ev.Msg.Channel, "D") {
-					name := ev.Msg.Text
-					api := slack.New(os.Getenv("BOT"))
-					api.CreateGroup(name)
-					api.InviteUserToGroup(name, ev.Msg.User)
-					m := rtm.NewOutgoingMessage("Okay making a new private channel for: "+name, ev.Msg.Channel)
-					rtm.SendMessage(m)
+					//name := ev.Msg.Text
+					//api := slack.New(os.Getenv("BOTADMIN"))
+					//api.CreateGroup(name)
+					//api.InviteUserToGroup(name, ev.Msg.User)
+
+					from := ev.Msg.User
+					state, ok := UserState[from]
+					if !ok {
+						UserState[from] = 1
+					}
+
+					if state == 1 {
+						m := rtm.NewOutgoingMessage("Hello, let's start your proposal. What is first name?", ev.Msg.Channel)
+						rtm.SendMessage(m)
+						UserState[from] = 2
+					} else if state == 2 {
+						m := rtm.NewOutgoingMessage("What is last name?", ev.Msg.Channel)
+						rtm.SendMessage(m)
+						UserState[from] = 3
+					} else {
+						m := rtm.NewOutgoingMessage("All done", ev.Msg.Channel)
+						rtm.SendMessage(m)
+						UserState[from] = 9
+					}
 				}
 
 				//name := ev.Msg.Channel
