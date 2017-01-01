@@ -12,9 +12,10 @@ From ^ that link make a new bot integration and name your bot "proposal"
 
 Copy the bot's API token to your clipboard and add it to your .bash_profile like:
 
+```
 export SLACK_PROPOSAL_BOT="xoxb-123456789-ORxt5Xg2yqV8jvDS5fVW9AAZ"
 expoort SLACK_PROPOSAL_ADMIN="xoxb-123456789-56xt5Xg2yqV8jvDS5fVW9ABY"
-
+```
 
 You can get your admin's token via:
 
