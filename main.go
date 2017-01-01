@@ -21,7 +21,7 @@ func handleRtm(rtm *slack.RTM) {
 
 				if ev.Msg.User != Me && strings.HasPrefix(ev.Msg.Channel, "D") {
 					//name := ev.Msg.Text
-					//api := slack.New(os.Getenv("BOTADMIN"))
+					//api := slack.New(os.Getenv("SLACK_PROPOSAL_ADMIN"))
 					//api.CreateGroup(name)
 					//api.InviteUserToGroup(name, ev.Msg.User)
 
@@ -65,7 +65,7 @@ func main() {
 		"Custom Package Option", "Specific Power Offset", "Specific PPA / Lease Rate", "Notes"}
 
 	fmt.Println("listening for proposals...")
-	api := slack.New(os.Getenv("BOT"))
+	api := slack.New(os.Getenv("SLACK_PROPOSAL_BOT"))
 	list, _ := api.GetUsers()
 	for _, u := range list {
 		if u.Name == "proposal" {
