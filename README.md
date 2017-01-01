@@ -24,3 +24,9 @@ https://get.slack.help/hc/en-us/articles/215770388-Create-and-regenerate-API-tok
 https://api.slack.com/docs/oauth-test-tokens
 
 http://higher.team/tokens
+
+Step 2.
+
+https://golang.org
+
+^ use golang to compile the main.go program in this repo. And run the program somewhere 24/7. You can rent a $5/month https://www.digitalocean.com box for this, or run it from any computer connected to the internet and always on. i.e. this program IS your bot listening and responding to messages, if it stop running, your bot stops running.
