@@ -37,11 +37,14 @@ func handleRtm(rtm *slack.RTM) {
 							m := rtm.NewOutgoingMessage(fmt.Sprintf("What is %s", Questions[UserState[from]]), ev.Msg.Channel)
 							rtm.SendMessage(m)
 						} else {
-							m := rtm.NewOutgoingMessage("All done.", ev.Msg.Channel)
+							m := rtm.NewOutgoingMessage("All done. I have created a new private channel here: foo", ev.Msg.Channel)
 							rtm.SendMessage(m)
 						}
 					}
 					UserState[from] += 1
+					if UserState[from] > len(Questions) {
+						UserState[from] = 0
+					}
 				}
 
 				//name := ev.Msg.Channel
