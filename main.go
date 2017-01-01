@@ -34,8 +34,7 @@ func handleRtm(rtm *slack.RTM) {
 						rtm.SendMessage(m)
 					default:
 						if UserState[from] < len(Questions) {
-							m := rtm.NewOutgoingMessage(fmt.Sprintf("What is %s",
-								len(Questions), Questions[UserState[from]]), ev.Msg.Channel)
+							m := rtm.NewOutgoingMessage(fmt.Sprintf("What is %s", Questions[UserState[from]]), ev.Msg.Channel)
 							rtm.SendMessage(m)
 						} else {
 							m := rtm.NewOutgoingMessage("All done.", ev.Msg.Channel)
