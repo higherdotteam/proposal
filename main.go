@@ -37,9 +37,11 @@ func handleRtm(rtm *slack.RTM) {
 							fmt.Println(UserAnswers)
 							api := slack.New(os.Getenv("SLACK_PROPOSAL_ADMIN"))
 							name := "p" + fmt.Sprintf("%d", time.Now().Unix())
-							g, _ := api.CreateGroup(name)
-							api.InviteUserToGroup(g.ID, ev.Msg.User)
-							api.InviteUserToGroup(g.ID, Me)
+							g, err := api.CreateGroup(name)
+							if err == nil {
+								api.InviteUserToGroup(g.ID, ev.Msg.User)
+								api.InviteUserToGroup(g.ID, Me)
+							}
 
 							m := rtm.NewOutgoingMessage("All done. I have created a new private channel here: #"+name, ev.Msg.Channel)
 							rtm.SendMessage(m)
@@ -49,8 +51,10 @@ func handleRtm(rtm *slack.RTM) {
 								buffer += fmt.Sprintf("%d. %s\n", i+1, q)
 								buffer += fmt.Sprintf("%s\n\n", UserAnswers[i+1])
 							}
-							m = rtm.NewOutgoingMessage(buffer, g.ID)
-							rtm.SendMessage(m)
+							if err == nil {
+								m = rtm.NewOutgoingMessage(buffer, g.ID)
+								rtm.SendMessage(m)
+							}
 						}
 					}
 					UserState[from] += 1
