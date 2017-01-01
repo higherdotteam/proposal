@@ -72,15 +72,12 @@ func handleRtm(rtm *slack.RTM) {
 }
 
 func main() {
-	Questions = []string{"First Name (Homeowner)", "Last Name (Homeowner)", "Address"}
-	/*
-		Questions = []string{"First Name (Homeowner)", "Last Name (Homeowner)", "Address",
-			"Phone Number (as many as possible)", "Email Address", "Sales Rep (Opener)",
-			"Other Sales Rep (Optional)", "Utility Name", "Utility Customer Account Number",
-			"Close Date & Time", "Specify Product(s) for Proposal", "Which Loan Plan?", "How much expected Savings?",
-			"If we discover that the home is inefficient how do we pay for it?",
-			"Custom Package Option", "Specific Power Offset", "Specific PPA / Lease Rate", "Notes"}
-	*/
+	Questions = []string{"First Name (Homeowner)", "Last Name (Homeowner)", "Address",
+		"Phone Number (as many as possible)", "Email Address", "Sales Rep (Opener)",
+		"Other Sales Rep (Optional)", "Utility Name", "Utility Customer Account Number",
+		"Close Date & Time", "Specify Product(s) for Proposal", "Which Loan Plan?", "How much expected Savings?",
+		"If we discover that the home is inefficient how do we pay for it?",
+		"Custom Package Option", "Specific Power Offset", "Specific PPA / Lease Rate", "Notes"}
 
 	fmt.Println("listening for proposals...")
 	api := slack.New(os.Getenv("SLACK_PROPOSAL_BOT"))
