@@ -38,17 +38,12 @@ func handleRtm(rtm *slack.RTM) {
 							api := slack.New(os.Getenv("SLACK_PROPOSAL_ADMIN"))
 							name := "p" + fmt.Sprintf("%d", time.Now().Unix())
 							g, _ := api.CreateGroup(name)
-							fmt.Println(g.ID)
-							_, b1, e1 := api.InviteUserToGroup(g.ID, ev.Msg.User)
-							fmt.Println(b1, e1)
-							_, b2, e2 := api.InviteUserToGroup(g.ID, Me)
-							fmt.Println(b2, e2)
+							api.InviteUserToGroup(g.ID, ev.Msg.User)
+							api.InviteUserToGroup(g.ID, Me)
 
 							m := rtm.NewOutgoingMessage("All done. I have created a new private channel here: #"+name, ev.Msg.Channel)
 							rtm.SendMessage(m)
 
-							m = rtm.NewOutgoingMessage("test", g.ID)
-							rtm.SendMessage(m)
 							m = rtm.NewOutgoingMessage(fmt.Sprintf("test %v", UserAnswers), g.ID)
 							rtm.SendMessage(m)
 						}
