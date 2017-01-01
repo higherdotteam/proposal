@@ -1,5 +1,7 @@
 package main
 
+//https://api.slack.com/docs/message-buttons#crafting_your_message
+
 import "fmt"
 import "github.com/nlopes/slack"
 import "os"
@@ -25,13 +27,13 @@ func handleRtm(rtm *slack.RTM) {
 
 					switch UserState[from] {
 					case 0:
-						m := rtm.NewOutgoingMessage(fmt.Sprintf("I'm going to ask you %d questions.\nWhat is %s",
+						m := rtm.NewOutgoingMessage(fmt.Sprintf("I'm going to ask you %d questions.\n%s",
 							len(Questions), Questions[0]), ev.Msg.Channel)
 						rtm.SendMessage(m)
 					default:
 						UserAnswers[UserState[from]] = ev.Msg.Text
 						if UserState[from] < len(Questions) {
-							m := rtm.NewOutgoingMessage(fmt.Sprintf("What is %s", Questions[UserState[from]]), ev.Msg.Channel)
+							m := rtm.NewOutgoingMessage(fmt.Sprintf("%s", Questions[UserState[from]]), ev.Msg.Channel)
 							rtm.SendMessage(m)
 						} else {
 							fmt.Println(UserAnswers)
@@ -70,12 +72,24 @@ func handleRtm(rtm *slack.RTM) {
 }
 
 func main() {
-	Questions = []string{"First Name (Homeowner)", "Last Name (Homeowner)", "Address",
-		"Phone Number (as many as possible)", "Email Address", "Sales Rep (Opener)",
-		"Other Sales Rep (Optional)", "Utility Name", "Utility Customer Account Number",
-		"Close Date & Time", "Specify Product(s) for Proposal", "Which Loan Plan?", "How much expected Savings?",
+	Questions = []string{"First Name (Homeowner)?",
+		"And what's their last name?",
+		"What's the property address were we will be installing?",
+		"I need as many phone numbers as you have for this customer. It's important for us to contact them. Please provide at least one but 2 or three would be better.",
+		"What's the email address. This should be a working email. If you done have one just type in scared to ask for and email. Just kidded type none.",
+		"Who is the sales rep here or opener. Please give your first and last name.",
+		"If there is another sales rep involved besides yourself please give me their full name.",
+		"What utility company does this customer get there power from?",
+		"What is the account number off their electric bill?",
+		"I need to make sure I get this to you on time. What is the date and time you are going to go back and close this customer. Please give a full date and time.",
+		"Please specify what products are going to be used in this proposal.",
+		"What loan plan would you like to offer this customer. If you don't know just type I don't know.",
+		"How much expected Savings?",
 		"If we discover that the home is inefficient how do we pay for it?",
-		"Custom Package Option", "Specific Power Offset", "Specific PPA / Lease Rate", "Notes"}
+		"If you have a custom package you use often then please tell me the package number and I'll bust it out for you in no time.",
+		"What power offset should i use on this proposal.",
+		"If this is a PPA please tell me the price per kWh you would like to use and the escalator you would like.",
+		"If you can think of anything we didn't cover here or if we need to change any of your answers this is the time to tell me. Any notes and as many notes as you can always help. The more the merrier."}
 
 	fmt.Println("listening for proposals...")
 	api := slack.New(os.Getenv("SLACK_PROPOSAL_BOT"))
