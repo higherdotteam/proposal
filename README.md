@@ -6,7 +6,7 @@ This program runs a bot named "proposal" who joins your slack team. Users can di
 # setup
 
 Step 1.
-https://my.slack.com/apps/manage/custom-integrations
+https://slack.com/apps/A0F7YS25R-bots
 
 From ^ that link make a new bot integration and name your bot "proposal"
 
